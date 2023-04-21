@@ -3,24 +3,6 @@ import {useState, useEffect} from 'react';
 import MovieEntry from './MovieEntry.jsx';
 
 const App = (props) => {
-  const allMovies = [
-    {title: 'Mean Girls',
-    year: '22',
-    runtime: '100',
-    metascore: '45',
-    imdbRating:'6',
-    watched: true,
-    viewDescription: false,
-    },
-    {title: 'Hackers',
-    year: '2442',
-    Runtime: '100d',
-    Metascore: 'ad5',
-    imdbRating:'6dasf',
-    watched: false,
-    viewDescription: false,
-    },
-  ]
 
   const [movies, setMovies] = useState([]);
   const [searchedMovies, setSearchedMovies] = useState(movies);
@@ -52,9 +34,7 @@ const App = (props) => {
     };
 
     let movieData = await callasync(newMovie);
-    console.log(movieData);
     setMovies(
-      // [...movies, {original_title: newMovie, watched: false}]
       movies.concat(movieData)
     );
     setNewMovie('');
@@ -94,25 +74,11 @@ const App = (props) => {
   }
 
   let callasync = async(query) => {
-    query = query || 'Mean Girls';
-    query = query.match(/\b(\w+)\b/g);
-
-    let queryString = '';
-    query.forEach((word) => {
-      queryString += word;
-      queryString += "+";
+    let params = query || 'Mean Girls';
+    let res = await fetch ('http://localhost:3000/api/movies?query=' + params, {
+      mode: "cors"
     })
-
-    queryString = queryString.slice(0, - 1)
-
-
-    let res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=e014e19f6fda575b88ede7b232052a98&query=${queryString}`)
-    let json = await res.json();
-
-    let data = json.results.map((movie) => {
-      movie['watched'] = false;
-      return movie
-    });
+    let data = await res.json();
 
     if (!movies.length) {
       setMovies(data);
