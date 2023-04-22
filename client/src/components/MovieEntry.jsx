@@ -1,17 +1,18 @@
 import React from 'react';
 
-const MovieEntry = ({movie, index, onClick, onClickViewDescription}) => {
+const MovieEntry = ({movie, onClick, onClickViewDescription}) => {
   let watchString = movie.watched ? 'Watched' : 'To Watch';
   let buttonString = movie.watched ? 'Mark as to Watch' : 'Mark as Watched'
+
   return (
     <li>
-      <h2 onClick={onClickViewDescription} id={index}>{movie.original_title}</h2>
+      <h2 onClick={onClickViewDescription} id={movie.id}>{movie.title}</h2>
       {movie.viewDescription &&
         <div>
-          <h3>Year Released: {movie.release_date.slice(0,3)}</h3>
+          <h3>Release Date: {movie.releaseDate}</h3>
           <h3>Overview: <p>{movie.overview}</p></h3>
-          <h3>Rating: <p>{movie.vote_average}</p></h3>
-          <p>{watchString}<button onClick={onClick} id={index}>{buttonString}</button></p>
+          <h3>Rating: <p>{movie.rating}</p></h3>
+          <p>{watchString}<button onClick={onClick} id={movie.id}>{buttonString}</button></p>
         </div>
 
       }
